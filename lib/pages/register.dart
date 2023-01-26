@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lab06/pages/login.dart';
+import 'package:lab06/pages/services/auth_service.dart';
 
 class RegisterPages extends StatefulWidget {
   const RegisterPages({super.key});
@@ -16,7 +18,7 @@ class _RegisterPagesState extends State<RegisterPages> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Login"),
+        title: const Text("Register"),
       ),
       body: SafeArea(
           child: Form(
@@ -25,6 +27,7 @@ class _RegisterPagesState extends State<RegisterPages> {
           children: [
             TextFormField(
                 controller: _emailController,
+                decoration: const InputDecoration(labelText: "Email"),
                 validator: ((value) {
                   if (value!.isEmpty) {
                     return "Enter Email Please!";
@@ -33,6 +36,7 @@ class _RegisterPagesState extends State<RegisterPages> {
                 })),
             TextFormField(
               controller: _passwordController,
+              decoration: const InputDecoration(labelText: "Password"),
               validator: ((value) {
                 if (value!.isEmpty) {
                   return "Enter Password Please ";
@@ -44,6 +48,14 @@ class _RegisterPagesState extends State<RegisterPages> {
                 onPressed: () {
                   if (_formkey.currentState!.validate()) {
                     print("OK");
+                    print(_emailController.text);
+                    AuthService.registerUser(
+                            _emailController.text, _passwordController.text)
+                        .then((value) {
+                      if (value == 1) {
+                        Navigator.pop(context);
+                      }
+                    });
                   }
                 },
                 child: const Text("Register")),

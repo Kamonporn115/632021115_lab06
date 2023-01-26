@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lab06/pages/register.dart';
+import 'package:lab06/pages/services/auth_service.dart';
+import 'package:lab06/pages/successful.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -26,6 +28,7 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             TextFormField(
                 controller: _emailController,
+                decoration: const InputDecoration(labelText: "Email"),
                 validator: ((value) {
                   if (value!.isEmpty) {
                     return "Enter Email Please!";
@@ -34,6 +37,7 @@ class _LoginPageState extends State<LoginPage> {
                 })),
             TextFormField(
               controller: _passwordController,
+              decoration: const InputDecoration(labelText: "Password"),
               validator: ((value) {
                 if (value!.isEmpty) {
                   return "Enter Password Please ";
@@ -45,18 +49,30 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () {
                   if (_formkey.currentState!.validate()) {
                     print("OK");
+                    AuthService.loginUser(
+                            _emailController.text, _passwordController.text)
+                        .then((value) {
+                      if (value == "Successful") {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SuccessfulPage(),
+                            ));
+                      }
+                    });
                   }
                 },
                 child: const Text("Login")),
             ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RegisterPages(),
-                      ));
-                },
-                child: const Text("Register")),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RegisterPages(),
+                    ));
+              },
+              child: const Text("Register"),
+            ),
           ],
         ),
       )),
